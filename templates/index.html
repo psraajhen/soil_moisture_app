@@ -1,1 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soil Moisture Monitor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .gauge {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Soil Moisture Monitor</h1>
+    <div id="gauge1" class="gauge"></div>
+    <div id="gauge2" class="gauge"></div>
+    <div id="gauge3" class="gauge"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5.5.0/dist/iro.min.js"></script>
+    <script>
+        function createGauge(id) {
+            return new iro.ColorPicker(id, {
+                width: 200,
+                color: "rgb(0, 255, 0)",
+                display: "inline-block"
+            });
+        }
+
+        const gauge1 = createGauge('#gauge1');
+        const gauge2 = createGauge('#gauge2');
+        const gauge3 = createGauge('#gauge3');
+
+        function updateGauges(data) {
+            gauge1.color.set({r: 255 - data.soil_moisture_1 / 64, g: data.soil_moisture_1 / 64, b: 0});
+            gauge2.color.set({r: 255 - data.soil_moisture_2 / 64, g: data.soil_moisture_2 / 64, b: 0});
+            gauge3.color.set({r: 255 - data.soil_moisture_3 / 64, g: data.soil_moisture_3 / 64, b: 0});
+        }
+
+        async function fetchData() {
+            const response = await fetch('/data');
+            const data = await response.json();
+            updateGauges(data);
+        }
+
+        setInterval(fetchData, 1000);
+    </script>
+</body>
+</html>
+
 
