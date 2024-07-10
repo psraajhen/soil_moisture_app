@@ -3,54 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soil Moisture Monitor</title>
+    <title>Soil Moisture Gauges</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.4/raphael-min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/toorshia/justgage@1.2.9/justgage.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
         }
-        .gauge {
-            width: 200px;
-            height: 200px;
-            margin: 20px auto;
+        .gauge-container {
+            display: inline-block;
+            margin: 20px;
+        }
+        .gauge-title {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        #datetime {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .legend {
+            font-size: 16px;
+            margin-top: 20px;
+            text-align: left;
+        }
+        .legend span {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
         }
     </style>
 </head>
 <body>
-    <h1>Soil Moisture Monitor</h1>
-    <div id="gauge1" class="gauge"></div>
-    <div id="gauge2" class="gauge"></div>
-    <div id="gauge3" class="gauge"></div>
+    <h1>Soil Moisture Gauges</h1>
+    <div id="datetime"></div>
+    <div class="gauge-container">
+        <div class="gauge-title">Sensor 1</div>
+        <div id="gauge1"></div>
+    </div>
+    <div class="gauge-container">
+        <div class="gauge-title">Sensor 2</div>
+        <div id="gauge2"></div>
+    </div>
+    <div class="gauge-container">
+        <div class="gauge-title">Sensor 3</div>
+        <div id="gauge3"></div>
+    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5.5.0/dist/iro.min.js"></script>
+    <div class="legend">
+        <div><span style="background-color: #FF0000;"></span> Very Dry (0-20%)</div>
+        <div><span style="background-color: #FF7F00;"></span> Dry (21-40%)</div>
+        <div><span style="background-color: #FFFF00;"></span> Moderate (41-60%)</div>
+        <div><span style="background-color: #7FFF00;"></span> Wet (61-80%)</div>
+        <div><span style="background-color: #00FF00;"></span> Very Wet (81-100%)</div>
+    </div>
+
     <script>
         function createGauge(id) {
-            return new iro.ColorPicker(id, {
-                width: 200,
-                color: "rgb(0, 255, 0)",
-                display: "inline-block"
+            return new JustGage({
+                id: id,
+                value: 0,
+                min: 0,
+                max: 100,
+                label: "Moisture Level (%)",
+                customSectors: {
+                    percents: true,
+                    ranges: [{
+                        color: "#FF0000",
+                        lo: 0,
+                        hi: 20
+                    }, {
+                        color: "#FF7F00",
+                        lo: 21,
+                        hi: 40
+                    }, {
+                        color: "#FFFF00",
+                        lo: 41,
+                        hi: 60
+                    }, {
+                        color: "#7FFF00",
+                        lo: 61,
+                        hi: 80
+                    }, {
+                        color: "#00FF00",
+                        lo: 81,
+                        hi: 100
+                    }]
+                }
             });
         }
 
-        const gauge1 = createGauge('#gauge1');
-        const gauge2 = createGauge('#gauge2');
-        const gauge3 = createGauge('#gauge3');
+        var gauge1 = createGauge("gauge1");
+        var gauge2 = createGauge("gauge2");
+        var gauge3 = createGauge("gauge3");
 
-        function updateGauges(data) {
-            gauge1.color.set({r: 255 - data.soil_moisture_1 / 64, g: data.soil_moisture_1 / 64, b: 0});
-            gauge2.color.set({r: 255 - data.soil_moisture_2 / 64, g: data.soil_moisture_2 / 64, b: 0});
-            gauge3.color.set({r: 255 - data.soil_moisture_3 / 64, g: data.soil_moisture_3 / 64, b: 0});
+        function updateGauges() {
+            fetch('/data')
+                .then(response => response.json())
+                .then(data => {
+                    var maxRawValue = 65535;
+                    gauge1.refresh((data.soil_moisture_1 / maxRawValue) * 100);
+                    gauge2.refresh((data.soil_moisture_2 / maxRawValue) * 100);
+                    gauge3.refresh((data.soil_moisture_3 / maxRawValue) * 100);
+
+                    var now = new Date();
+                    document.getElementById('datetime').innerHTML = now.toLocaleString();
+                });
         }
 
-        async function fetchData() {
-            const response = await fetch('/data');
-            const data = await response.json();
-            updateGauges(data);
-        }
-
-        setInterval(fetchData, 1000);
+        setInterval(updateGauges, 1000);
     </script>
 </body>
 </html>
-
-
