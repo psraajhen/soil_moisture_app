@@ -3,14 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Soil Moisture Gauges</title>
+    <title>Live Soil Moisture Data</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.4/raphael-min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/toorshia/justgage@1.2.9/justgage.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
+            background-image: url('C:/Users/p.gopalan/personal/soil_moisture_sensor_app/static/images/golden.jpg'); /* Replace with your image URL */
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #333; /* Dark text for readability */
         }
+        
         .gauge-container {
             display: inline-block;
             margin: 20px;
@@ -37,7 +43,7 @@
     </style>
 </head>
 <body>
-    <h1>Soil Moisture Gauges</h1>
+    <h1>Real-Time Soil Moisture Monitor</h1>
     <div id="datetime"></div>
     <div class="gauge-container">
         <div class="gauge-title">Sensor 1</div>
@@ -53,11 +59,11 @@
     </div>
 
     <div class="legend">
-        <div><span style="background-color: #FF0000;"></span> Very Dry (0-20%)</div>
+        <div><span style="background-color: #FF0000;"></span> Hyper-Arid (0-20%)</div>
         <div><span style="background-color: #FF7F00;"></span> Dry (21-40%)</div>
         <div><span style="background-color: #FFFF00;"></span> Moderate (41-60%)</div>
-        <div><span style="background-color: #7FFF00;"></span> Wet (61-80%)</div>
-        <div><span style="background-color: #00FF00;"></span> Very Wet (81-100%)</div>
+        <div><span style="background-color: #7FFF00;"></span> Humid (61-80%)</div>
+        <div><span style="background-color: #00FF00;"></span> Extremely Humid (81-100%)</div>
     </div>
 
     <script>
