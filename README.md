@@ -61,6 +61,7 @@ This project is a web-based soil moisture monitoring system using a Raspberry Pi
 
 3. **View the soil moisture levels in real-time on the web interface.**
 
+## Project Structure
 /soil-moisture-monitor
 |-- app.py # Main application file
 |-- requirements.txt # Python dependencies
