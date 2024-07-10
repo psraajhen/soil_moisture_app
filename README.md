@@ -10,7 +10,7 @@ This project is a web-based soil moisture monitoring system using a Raspberry Pi
 - [Usage](#usage)
 - [Project Structure](#project-structure)
 - [Contributing](#contributing)
-- [License](#license)
+
 
 ## Features
 
@@ -61,5 +61,20 @@ This project is a web-based soil moisture monitoring system using a Raspberry Pi
 
 3. **View the soil moisture levels in real-time on the web interface.**
 
+/soil-moisture-monitor
+|-- app.py # Main application file
+|-- requirements.txt # Python dependencies
+|-- .gitignore # Git ignore file
+|-- templates
+|-- index.html # HTML template for the web interface
 
+## Contributing
+
+Contributions are welcome! Please follow these steps to contribute:
+
+1. Fork the repository.
+2. Create a new branch: `git checkout -b feature-branch`.
+3. Make your changes and commit them: `git commit -m 'Add some feature'`.
+4. Push to the branch: `git push origin feature-branch`.
+5. Open a pull request.
 
